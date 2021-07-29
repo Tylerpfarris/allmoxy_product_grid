@@ -83,8 +83,8 @@ function EnhancedTableHead(props) {
     rowCount,
     onRequestSort,
   } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
+  const createSortHandler = (property) => (e) => {
+    onRequestSort(e, property);
   };
 
   return (
@@ -241,7 +241,7 @@ export default function EnhancedTable() {
   const [loading, setLoading] = useState(false);
 
   const ref = firebase.firestore().collection('Products');
-
+//   console.log(selected);
   const getProducts = () => {
     setLoading(true);
     ref.onSnapshot((querySnapshot) => {
@@ -258,14 +258,14 @@ export default function EnhancedTable() {
     getProducts();
   }, []);
 
-  const handleRequestSort = (event, property) => {
+  const handleRequestSort = (e, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
+  const handleSelectAllClick = (e) => {
+    if (e.target.checked) {
       const newSelecteds = products.map((n) => n.title);
       setSelected(newSelecteds);
       return;
@@ -273,7 +273,7 @@ export default function EnhancedTable() {
     setSelected([]);
   };
 
-  const handleClick = (event, title) => {
+  const handleClick = (e, title) => {
     const selectedIndex = selected.indexOf(title);
     let newSelected = [];
 
@@ -293,17 +293,17 @@ export default function EnhancedTable() {
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (e, newPage) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+  const handleChangeRowsPerPage = (e) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
+  const handleChangeDense = (e) => {
+    setDense(e.target.checked);
   };
 
   const isSelected = (title) => selected.indexOf(title) !== -1;
@@ -344,7 +344,7 @@ export default function EnhancedTable() {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, product.title)}
+                      onClick={(e) => handleClick(e, product.title)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
