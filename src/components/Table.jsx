@@ -8,7 +8,7 @@ export default function Table() {
   const [loading, setLoading] = useState(false);
 
   const ref = firebase.firestore().collection('Products');
-  console.log(ref);
+  console.log(products.img);
   const getProducts = () => {
     setLoading(true);
     ref.onSnapshot((querySnapshot) => {
@@ -44,10 +44,10 @@ export default function Table() {
           <tr key={`${id}+${title}`}>
             <td>{title}</td>
             <td>{description}</td>
-            <td>{quantity}</td>
             <td>${price}</td>
+            <td>{quantity}</td>
             <td>
-              <img src={img} alt={title} />
+              <img width="150px" src={img} alt={title} />
             </td>
           </tr>
         ))}
