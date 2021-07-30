@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,8 +10,6 @@ import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckIcon from '@material-ui/icons/Check';
-
-import firebase from '../Firebase/firebase';
 import { TextField } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -20,78 +18,17 @@ const useStyles = makeStyles({
   },
 });
 
-export default function BasicTable({ header }) {
+export default function BasicTable({
+  header,
+  handleSort,
+  handleDelete,
+  handleStopEdit,
+  handleEdit,
+  editIdx,
+  handleChange,
+  products,
+}) {
   const classes = useStyles();
-  const [editIdx, setEditIdx] = useState(-1);
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [updatedProduct, setUpdatedProduct] = useState({
-    title: '',
-    description: '',
-    price: 0,
-    quantity: 0,
-  });
-
-  const ref = firebase.firestore().collection('Products');
-  console.log(ref);
-  const getProducts = () => {
-    setLoading(true);
-    ref.onSnapshot((querySnapshot) => {
-      const items = [];
-      querySnapshot.forEach((doc) => {
-        items.push(doc.data());
-      });
-      setProducts(items);
-      setLoading(false);
-    });
-  };
-  useEffect(() => {
-    getProducts();
-  }, []);
-
-  const updateProduct = async (id, updates) => {
-    await firebase.firestore().collection('Products').doc(id).update(updates);
-    const doc = await firebase.firestore().collection('Products').doc(id).get();
-    const product = {
-      id: doc.id,
-      ...doc.data(),
-    };
-    return product;
-  };
-
-  const handleChange = (event, name, i, product) => {
-    const { value } = event.target;
-    const pro = products.map((row, j) =>
-      j === i ? { ...row, [name]: value } : row
-    );
-
-    setUpdatedProduct({
-      title: name === 'title' ? value : product.title,
-      description: name === 'description' ? value : product.description,
-      price: name === 'price' ? value : product.price,
-      quantity: name === 'quantity' ? value : product.quantity,
-    });
-    setProducts(pro);
-  };
-
-  const handleStopEdit = (product) => {
-    console.log(product.id);
-    updateProduct(product.id, updatedProduct);
-    setEditIdx(-1);
-  };
-  const handleEdit = (i) => {
-    setEditIdx(i);
-  };
-
-  const handleDelete = (product) => {
-    console.log(product);
-    firebase
-      .firestore()
-      .collection('Products')
-      .doc(product.id)
-      .delete()
-      .catch((error) => console.log(error));
-  };
 
   const row = (
     product,
@@ -139,8 +76,6 @@ export default function BasicTable({ header }) {
     );
   };
 
-  if (loading) return <h1>Loading...</h1>;
-
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
@@ -148,7 +83,9 @@ export default function BasicTable({ header }) {
           <TableRow>
             {header.map((product, i) => (
               <TableCell align="center" key={i}>
-                {product.name}
+                <div onClick={() => handleSort(product.prop)}>
+                  {product.name}
+                </div>
               </TableCell>
             ))}
           </TableRow>
