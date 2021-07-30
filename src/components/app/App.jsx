@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Form from '../Form';
-import Table2 from '../Table2';
+import ProductTable from '../ProductTable';
 import firebase from '../../Firebase/firebase';
-import { orderBy } from 'lodash';
+
 
 const ref = firebase.firestore().collection('Products');
 
@@ -10,8 +10,6 @@ export default function App() {
   const [editIdx, setEditIdx] = useState(-1);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [sortDirection, setSortDirection] = useState('desc');
-  const [columnToSort, setColumnToSort] = useState('');
   const [updatedProduct, setUpdatedProduct] = useState({
     title: '',
     description: '',
@@ -19,9 +17,44 @@ export default function App() {
     quantity: 0,
   });
 
-  const invertDirection = {
-    asc: 'desc',
-    desc: 'asc',
+  const [orderDirection, setOrderDirection] = useState('asc');
+  const [valueToOrderBy, setValueToOrderBy] = useState(null);
+
+  const handleRequestSort = (event, property) => {
+    const isAscending = valueToOrderBy === property && orderDirection === 'asc';
+    setValueToOrderBy(property);
+    setOrderDirection(isAscending ? 'desc' : 'asc');
+  };
+
+  const createSortHandler = (property) => (event) => {
+    handleRequestSort(event, property);
+  };
+  function descendingComparator(a, b, orderBy) {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function getComparator(order, orderBy) {
+   
+    return order === 'desc'
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  }
+
+  const sortedRowInformation = (rowArray, comparator) => {
+    const stabilizedRowArray = rowArray.map((el, index) => [el, index]);
+
+    stabilizedRowArray.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    return stabilizedRowArray.map((el) => el[0]);
   };
 
   const getProducts = () => {
@@ -82,27 +115,23 @@ export default function App() {
       .catch((error) => console.log(error));
   };
 
-  const handleSort = (columnName) => {
-    console.log(columnName);
-    setColumnToSort(columnName);
-    setSortDirection(
-      columnToSort === columnName ? invertDirection[sortDirection] : 'asc'
-    );
-  };
   if (loading) return <h1>Loading...</h1>;
   return (
     <div>
       <Form />
-      <Table2
-        handleSort={handleSort}
+      <ProductTable
         handleDelete={handleDelete}
         handleStopEdit={handleStopEdit}
         handleEdit={handleEdit}
         editIdx={editIdx}
         handleChange={handleChange}
-        columnToSort={columnToSort}
-        sortDirection={sortDirection}
-        products={orderBy(products, columnToSort, sortDirection)}
+        products={sortedRowInformation(
+          products,
+          getComparator(orderDirection, valueToOrderBy)
+        )}
+        orderDirection={orderDirection}
+        createSortHandler={createSortHandler}
+        valueToOrderBy={valueToOrderBy}
         header={[
           {
             name: 'Title',

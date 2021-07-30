@@ -20,8 +20,8 @@ export default function Form() {
     e.preventDefault();
     const title = e.target.title.value;
     const description = e.target.description.value;
-    const price = e.target.price.value;
-    const quantity = e.target.quantity.value;
+    const price = Number(e.target.price.value);
+    const quantity = Number(e.target.quantity.value);
     const id = uuidv4();
 
     if (!title || !description || !price || !quantity) return;
