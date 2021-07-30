@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import firebase from '../Firebase/firebase';
+import { v4 as uuidv4 } from 'uuid';
 
 const db = firebase.firestore();
 
@@ -20,16 +22,17 @@ export default function Form() {
     const description = e.target.description.value;
     const price = e.target.price.value;
     const quantity = e.target.quantity.value;
+    const id = uuidv4();
 
     if (!title || !description || !price || !quantity) return;
-    db.collection('Products').doc(title, description, price, quantity).set({
+    db.collection('Products').doc(id).set({
+      id,
       title,
       description,
       price,
       quantity,
       img: fileUrl,
     });
-     
   };
   return (
     <div>

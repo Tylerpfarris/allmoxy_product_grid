@@ -9,8 +9,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CheckIcon from '@material-ui/icons/Check';
 
 import firebase from '../Firebase/firebase';
+import { TextField } from '@material-ui/core';
 
 const useStyles = makeStyles({
   table: {
@@ -20,12 +22,18 @@ const useStyles = makeStyles({
 
 export default function BasicTable({ header }) {
   const classes = useStyles();
-  const [editIdx, setEditIdx] = useState('');
+  const [editIdx, setEditIdx] = useState(-1);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  // const [editIdx, setEditIdx]
+  const [updatedProduct, setUpdatedProduct] = useState({
+    title: '',
+    description: '',
+    price: 0,
+    quantity: 0,
+  });
+
   const ref = firebase.firestore().collection('Products');
-  //   console.log(selected);
+  console.log(ref);
   const getProducts = () => {
     setLoading(true);
     ref.onSnapshot((querySnapshot) => {
@@ -33,7 +41,6 @@ export default function BasicTable({ header }) {
       querySnapshot.forEach((doc) => {
         items.push(doc.data());
       });
-
       setProducts(items);
       setLoading(false);
     });
@@ -42,30 +49,95 @@ export default function BasicTable({ header }) {
     getProducts();
   }, []);
 
-  const handleEdit = (product) => {
-    console.log(product);
-    setEditIdx(product.title);
-    console.log(editIdx);
-    firebase
-      .firestore()
-      .collection('Products')
-      .doc(product.title)
-      .update({
-        title: 'Kiwiwiw',
-      })
-      .catch((error) => console.log(error));
+  const updateProduct = async (id, updates) => {
+    await firebase.firestore().collection('Products').doc(id).update(updates);
+    const doc = await firebase.firestore().collection('Products').doc(id).get();
+    const product = {
+      id: doc.id,
+      ...doc.data(),
+    };
+    return product;
   };
+
+  const handleChange = (event, name, i, product) => {
+    const { value } = event.target;
+    const pro = products.map((row, j) =>
+      j === i ? { ...row, [name]: value } : row
+    );
+
+    setUpdatedProduct({
+      title: name === 'title' ? value : product.title,
+      description: name === 'description' ? value : product.description,
+      price: name === 'price' ? value : product.price,
+      quantity: name === 'quantity' ? value : product.quantity,
+    });
+    setProducts(pro);
+  };
+
+  const handleStopEdit = (product) => {
+    console.log(product.id);
+    updateProduct(product.id, updatedProduct);
+    setEditIdx(-1);
+  };
+  const handleEdit = (i) => {
+    setEditIdx(i);
+  };
+
   const handleDelete = (product) => {
     console.log(product);
     firebase
       .firestore()
       .collection('Products')
-      .doc(product.title)
+      .doc(product.id)
       .delete()
       .catch((error) => console.log(error));
   };
 
-  //   const currentlyEditing = editIdx === product.title;
+  const row = (
+    product,
+    i,
+    header,
+    handleDelete,
+    handleEdit,
+    editIdx,
+    handleChange,
+    handleStopEdit
+  ) => {
+    const currentlyEditing = editIdx === i;
+    return (
+      <TableRow key={`tr-${i}`}>
+        {header.map((y, k) =>
+          y.prop === 'img' ? (
+            <TableCell key={`trc-${k}`}>
+              <img width="150px" src={product[y.prop]} alt="" />
+            </TableCell>
+          ) : (
+            <TableCell TableCell key={`trc-${k}`}>
+              {currentlyEditing ? (
+                <TextField
+                  name={y.prop}
+                  onChange={(event) => handleChange(event, y.prop, i, product)}
+                  value={product[y.prop]}
+                />
+              ) : (
+                product[y.prop]
+              )}
+            </TableCell>
+          )
+        )}
+        <TableCell>
+          {currentlyEditing ? (
+            <CheckIcon onClick={() => handleStopEdit(product)} />
+          ) : (
+            <EditIcon onClick={() => handleEdit(i)} />
+          )}
+        </TableCell>
+        <TableCell>
+          <DeleteIcon onClick={() => handleDelete(product)} />
+        </TableCell>
+      </TableRow>
+    );
+  };
 
   if (loading) return <h1>Loading...</h1>;
 
@@ -82,40 +154,18 @@ export default function BasicTable({ header }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {products.map((product, i) => (
-            <TableRow key={`tr-${i}`}>
-              {header.map((y, k) =>
-                y.prop === 'img' ? (
-                  <TableCell key={`trc-${k}`}>
-                    <img width="150px" src={product[y.prop]} alt="" />
-                  </TableCell>
-                ) : (
-                  <TableCell TableCell key={`trc-${k}`}>
-                    {product[y.prop]}
-                  </TableCell>
-                )
-              )}
-            </TableRow>
-          ))}
-
-          {/* // <TableRow key={j}>
-            //   <TableCell component="th" scope="product">
-            //     {product.title}
-            //   </TableCell>
-            //   <TableCell align="right">{product.description}</TableCell>
-            //   <TableCell align="right">${product.price}</TableCell>
-            //   <TableCell align="right">{product.quantity}</TableCell>
-            //   <TableCell align="right">
-            //     {' '}
-            //     <img width="150px" src={product.img} alt="" />
-            //   </TableCell>
-            //   <TableCell>
-            //     <EditIcon onClick={() => handleEdit(product)} />
-            //   </TableCell>
-            //   <TableCell>
-            //     <DeleteIcon onClick={() => handleDelete(product)} />
-            //   </TableCell>
-            // </TableRow> */}
+          {products.map((product, i) =>
+            row(
+              product,
+              i,
+              header,
+              handleDelete,
+              handleEdit,
+              editIdx,
+              handleChange,
+              handleStopEdit
+            )
+          )}
         </TableBody>
       </Table>
     </TableContainer>
