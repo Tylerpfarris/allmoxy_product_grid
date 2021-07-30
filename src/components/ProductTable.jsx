@@ -1,15 +1,18 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Paper from '@material-ui/core/Paper';
-
+import PropTypes from 'prop-types';
 import ProductTableRow from './ProductTableRow';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  Paper,
+  makeStyles,
+} from '@material-ui/core';
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -17,7 +20,7 @@ const useStyles = makeStyles({
 });
 
 export default function ProductTable({
-  header,
+  headers,
   handleDelete,
   handleStopEdit,
   handleEdit,
@@ -30,14 +33,13 @@ export default function ProductTable({
 }) {
   const classes = useStyles();
 
-
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            {header.map((product, i) => (
-              <TableCell align="center" key={i}>
+            {headers.map((product, i) => (
+              <TableCell align="left" key={i}>
                 <TableSortLabel
                   active={valueToOrderBy === product.prop}
                   direction={
@@ -45,8 +47,6 @@ export default function ProductTable({
                   }
                   onClick={createSortHandler(product.prop)}
                 >
-                  {/* <div onClick={() => handleSort(product.prop)}>
-                  </div> */}
                   {product.name}
                 </TableSortLabel>
               </TableCell>
@@ -55,19 +55,9 @@ export default function ProductTable({
         </TableHead>
         <TableBody>
           {products.map((product, index) => (
-            // row(
-            //   product,
-            //   i,
-            //   header,
-            //   handleDelete,
-            //   handleEdit,
-            //   editIdx,
-            //   handleChange,
-            //   handleStopEdit
-            // )
             <ProductTableRow
               key={index}
-              header={header}
+              headers={headers}
               product={product}
               handleChange={handleChange}
               handleStopEdit={handleStopEdit}
@@ -82,3 +72,25 @@ export default function ProductTable({
     </TableContainer>
   );
 }
+
+ProductTable.propTypes = {
+  headers: PropTypes.array.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  handleStopEdit: PropTypes.func.isRequired,
+  handleEdit: PropTypes.func.isRequired,
+  editIdx: PropTypes.number.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  products: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      price: PropTypes.number.isRequired,
+      quantity: PropTypes.number.isRequired,
+      img: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  valueToOrderBy: PropTypes.string.isRequired,
+  orderDirection: PropTypes.string.isRequired,
+  createSortHandler: PropTypes.func.isRequired,
+};

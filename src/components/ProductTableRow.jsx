@@ -1,12 +1,13 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import { TableCell, TableRow, TextField } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckIcon from '@material-ui/icons/Check';
 
-import React from 'react';
-
 export default function ProductTableRow({
-  header,
+  headers,
   product,
   handleChange,
   handleStopEdit,
@@ -16,25 +17,26 @@ export default function ProductTableRow({
   editIdx,
 }) {
   const currentlyEditing = editIdx === index;
+
   return (
     <TableRow TableRow key={`tr-${index}`}>
-      {header.map((y, k) =>
-        y.prop === 'img' ? (
+      {headers.map((header, k) =>
+        header.prop === 'img' ? (
           <TableCell key={`trc-${k}`}>
-            <img width="150px" src={product[y.prop]} alt="" />
+            <img width="150px" src={product[header.prop]} alt="" />
           </TableCell>
         ) : (
           <TableCell TableCell key={`trc-${k}`}>
             {currentlyEditing ? (
               <TextField
-                name={y.prop}
+                name={header.prop}
                 onChange={(event) =>
-                  handleChange(event, y.prop, index, product)
+                  handleChange(event, header.prop, index, product)
                 }
-                value={product[y.prop]}
+                value={product[header.prop]}
               />
             ) : (
-              product[y.prop]
+              product[header.prop]
             )}
           </TableCell>
         )
@@ -52,3 +54,14 @@ export default function ProductTableRow({
     </TableRow>
   );
 }
+
+ProductTableRow.propTypes = {
+  headers: PropTypes.array.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  handleStopEdit: PropTypes.func.isRequired,
+  handleEdit: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+  editIdx: PropTypes.number.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  product: PropTypes.object.isRequired,
+};
