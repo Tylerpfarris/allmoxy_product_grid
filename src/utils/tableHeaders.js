@@ -1,5 +1,9 @@
 export const tableHeaders = [
   {
+    name: 'Image',
+    prop: 'img',
+  },
+  {
     name: 'Title',
     prop: 'title',
   },
@@ -8,15 +12,15 @@ export const tableHeaders = [
     prop: 'description',
   },
   {
-    name: 'Price',
+    name: 'Price per lb.',
     prop: 'price',
   },
   {
-    name: 'Quantity',
+    name: 'Quantity (lbs)',
     prop: 'quantity',
   },
   {
-    name: 'Image',
-    prop: 'img',
+    name: '',
+    prop: 'edit',
   },
 ]; 

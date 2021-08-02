@@ -11,13 +11,15 @@ import {
   TableSortLabel,
   Paper,
   makeStyles,
+  Box,
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650,
+    minWidth: 200,
   },
 });
+console.log(useStyles);
 
 export default function ProductTable({
   headers,
@@ -34,42 +36,48 @@ export default function ProductTable({
   const classes = useStyles();
 
   return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            {headers.map((product, i) => (
-              <TableCell align="left" key={i}>
-                <TableSortLabel
-                  active={valueToOrderBy === product.prop}
-                  direction={
-                    valueToOrderBy === product.prop ? orderDirection : 'asc'
-                  }
-                  onClick={createSortHandler(product.prop)}
-                >
-                  {product.name}
-                </TableSortLabel>
-              </TableCell>
+    <Box style={{ margin: '5rem' }}>
+      <TableContainer component={Paper}>
+        <Table stickyHeader className={classes.table} aria-label="simple table">
+          <TableHead style={{border: 'none' }}>
+            <TableRow>
+              {headers.map((product, i) => (
+                <TableCell align="left" key={i} style={{ width: 'auto' }}>
+                  {product.prop === 'edit' ? (
+                    product.name
+                  ) : (
+                    <TableSortLabel
+                      active={valueToOrderBy === product.prop}
+                      direction={
+                        valueToOrderBy === product.prop ? orderDirection : 'asc'
+                      }
+                      onClick={createSortHandler(product.prop)}
+                    >
+                      {product.name}
+                    </TableSortLabel>
+                  )}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {products.map((product, index) => (
+              <ProductTableRow
+                key={index}
+                headers={headers}
+                product={product}
+                handleChange={handleChange}
+                handleStopEdit={handleStopEdit}
+                handleDelete={handleDelete}
+                handleEdit={handleEdit}
+                index={index}
+                editIdx={editIdx}
+              />
             ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {products.map((product, index) => (
-            <ProductTableRow
-              key={index}
-              headers={headers}
-              product={product}
-              handleChange={handleChange}
-              handleStopEdit={handleStopEdit}
-              handleDelete={handleDelete}
-              handleEdit={handleEdit}
-              index={index}
-              editIdx={editIdx}
-            />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }
 
