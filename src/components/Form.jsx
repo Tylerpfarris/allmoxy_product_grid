@@ -117,15 +117,14 @@ export default function Form() {
             style={{
               margin: '1rem',
               width: '10rem',
-              color: '#21BA4C',
+
               textAlign: 'center',
             }}
             type="submit"
-           
           >
-            <ArrowUpwardIcon />
-            <Typography>add product</Typography>
-            <ArrowUpwardIcon />
+            <ArrowUpwardIcon style={{ color: '#21BA4C' }} />
+            <Typography style={{ color: '#7c7c7c' }}>add product</Typography>
+            <ArrowUpwardIcon style={{ color: '#21BA4C' }} />
           </Button>
         </Container>
       </form>

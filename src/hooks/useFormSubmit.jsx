@@ -11,6 +11,7 @@ export const useFormSubmit = () => {
   const [quantity, setQuantity] = useState(null);
   const [fileName, setFileName] = useState('');
 
+
   const onFileChange = async (e) => {
     const file = e.target.files[0];
     setFileName(file.name);
@@ -40,6 +41,7 @@ export const useFormSubmit = () => {
       })
       .then(() => {
         e.target.reset();
+        setFileName('');
       });
   };
 
