@@ -22,8 +22,8 @@ export const useUpdateProduct = (products, setProducts) => {
     return productImgRef.update({
       title: product.title,
       description: product.description,
-      price: product.price,
-      quantity: product.quantity,
+      price: Number(product.price),
+      quantity: Number(product.quantity),
       img: uploadImg,
     });
   };
@@ -33,13 +33,6 @@ export const useUpdateProduct = (products, setProducts) => {
     const pro = products.map((row, j) =>
       j === i ? { ...row, [name]: value } : row
     );
-    console.log('PRO===', pro);
-    console.log('NAME===', name);
-    console.log('EVENT.NAME===', event.target.name);
-    console.log('PRODUCT===', product);
-    console.log('I===', i);
-    console.log('VALUE===', value);
-    console.log('updatedProduct===', updatedProduct);
     
     setUpdatedProduct({
       [name]: value,

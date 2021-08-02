@@ -2,7 +2,8 @@ export const useFormOnChange = (
   setTitle,
   setDescription,
   setPrice,
-  setQuantity
+  setQuantity,
+
 ) => {
   const handleTitleChange = ({ target }) => {
     setTitle(target.value);
@@ -18,9 +19,9 @@ export const useFormOnChange = (
   };
 
   return {
-    handleQuantityChange,
-    handlePriceChange,
-    handleDescriptionChange,
     handleTitleChange,
+    handleDescriptionChange,
+    handlePriceChange,
+    handleQuantityChange,
   };
 };

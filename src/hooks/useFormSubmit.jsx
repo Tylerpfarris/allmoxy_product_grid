@@ -1,57 +1,48 @@
-import { useEffect } from 'react';
 import { useState } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 import { db, storage } from '../Firebase/firebase';
 
 export const useFormSubmit = () => {
-  const [fileUrl, setFileUrl] = useState(null);
+  const [fileUrl, setFileUrl] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(null);
   const [quantity, setQuantity] = useState(null);
-  const [product, setProduct] = useState({
-    title: '',
-    description: '',
-    price: 0,
-    quantity: 0
-  });
+  const [fileName, setFileName] = useState('');
+
   const onFileChange = async (e) => {
     const file = e.target.files[0];
+    setFileName(file.name);
+
     const storageRef = storage.ref();
     const fileRef = storageRef.child(file.name);
 
-    await fileRef.put(file);
-    setFileUrl(await fileRef.getDownloadURL());
+    const imgUrl = await fileRef.getDownloadURL();
+    setFileUrl(imgUrl);
   };
 
-
-
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+
     const id = uuidv4();
 
-    if (!title || !description || !price || !quantity) return;
-
-    db.collection('Products').doc(id).set({
-      
-      
-      id,
-      title,
-      description,
-      price,
-      quantity,
-      img: fileUrl,
-    });
-
-    // useEffect(() => {
-      
-    // }, []); 
-    // setTitle('');
-    // setDescription('');
-    // setPrice(0);
-    // setQuantity(0);
+    await db
+      .collection('Products')
+      .doc(id)
+      .set({
+        id,
+        title,
+        description,
+        price,
+        quantity,
+        img: fileUrl,
+      })
+      .then(() => {
+        e.target.reset();
+      });
   };
+
   return {
     onSubmit,
     onFileChange,
@@ -59,10 +50,10 @@ export const useFormSubmit = () => {
     setDescription,
     setPrice,
     setQuantity,
-    setProduct,
+    fileName,
     title,
     description,
     price,
-    quantity
+    quantity,
   };
 };

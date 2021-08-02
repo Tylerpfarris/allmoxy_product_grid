@@ -36,7 +36,7 @@ export default function ProductTable({
   const classes = useStyles();
 
   return (
-    <Box style={{ margin: '5rem' }}>
+    <Box style={{ margin: '5rem', marginTop: '1rem' }}>
       <TableContainer component={Paper}>
         <Table stickyHeader className={classes.table} aria-label="simple table">
           <TableHead style={{border: 'none' }}>

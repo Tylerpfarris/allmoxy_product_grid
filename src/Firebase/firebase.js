@@ -23,8 +23,18 @@ export const storage = firebase.storage();
 //async await method
 
 export const updateProduct = async (id, updates) => {
-  await firebase.firestore().collection('Products').doc(id).update(updates);
-  const doc = await firebase.firestore().collection('Products').doc(id).get();
+  await firebase
+    .firestore()
+    .collection('Products')
+    .doc(id)
+    .update(updates);
+  
+  const doc = await firebase
+    .firestore()
+    .collection('Products')
+    .doc(id)
+    .get();
+  
   const product = {
     id: doc.id,
     ...doc.data(),

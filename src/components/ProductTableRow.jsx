@@ -1,17 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  TableCell,
-  TableRow,
-  TextField,
-  Input,
-  Drawer,
-  Button,
-  Menu,
-  MenuItem,
-  Box,
-} from '@material-ui/core';
+import { TableCell, TableRow, TextField } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckIcon from '@material-ui/icons/Check';
@@ -34,6 +24,7 @@ export default function ProductTableRow({
       {headers.map((header, k) =>
         header.prop === 'edit' ? (
           <TableCell
+            key={`tc-${indexedDB}`}
             style={{
               width: '.5rem',
               backgroundColor: '#FAFAFA',
@@ -42,7 +33,7 @@ export default function ProductTableRow({
             {currentlyEditing ? (
               <CheckIcon
                 color="secondary"
-                style={{ cursor: 'pointer', color: '#06E32C' }}
+                style={{ cursor: 'pointer', color: '#21BA4C' }}
                 onClick={() => handleStopEdit(product)}
               />
             ) : (
@@ -77,9 +68,10 @@ export default function ProductTableRow({
             )}
           </TableCell>
         ) : (
-          <TableCell TableCell key={`trc-${k}`}>
+          <TableCell key={`trc-${k}`}>
             {currentlyEditing ? (
               <TextField
+                multiline
                 required
                 name={header.prop}
                 onChange={(event) =>
