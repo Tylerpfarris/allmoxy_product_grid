@@ -76,7 +76,7 @@ export default function Form() {
             data-testid="quantity-input"
             required
             onChange={(e) => handleQuantityChange(e)}
-            type="number"
+            type="text"
             name="quantity"
             placeholder="QUANTITY"
           />

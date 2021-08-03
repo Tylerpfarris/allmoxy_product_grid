@@ -97,8 +97,8 @@ ProductTable.propTypes = {
       id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
-      price: PropTypes.string.isRequired,
-      quantity: PropTypes.number.isRequired,
+      price: PropTypes.isRequired,
+      quantity: PropTypes.isRequired,
       img: PropTypes.string.isRequired,
     })
   ).isRequired,

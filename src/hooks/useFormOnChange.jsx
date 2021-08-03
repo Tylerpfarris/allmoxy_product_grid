@@ -11,7 +11,7 @@ export const useFormOnChange = (
     setDescription(target.value);
   };
   const handlePriceChange = ({ target }) => {
-    setPrice(target.value);
+    setPrice(Number(target.value));
   };
   const handleQuantityChange = ({ target }) => {
     setQuantity(Number(target.value));
