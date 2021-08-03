@@ -29,18 +29,15 @@ export default function Form() {
     handleQuantityChange,
   } = useFormOnChange(setTitle, setDescription, setPrice, setQuantity);
 
-
-
   return (
     <Box style={{ marginTop: '0', display: 'flex', justifyContent: 'center' }}>
       <form
+        data-testid="product-form"
         onSubmit={onSubmit}
         style={{
           display: 'flex',
           flexDirection: 'column',
-          // margin: '5rem',
           marginBottom: '0',
-
           justifyContent: 'space-around',
         }}
       >
@@ -52,6 +49,7 @@ export default function Form() {
           }}
         >
           <TextField
+            data-testid="title-input"
             required
             onChange={(e) => handleTitleChange(e)}
             type="text"
@@ -59,14 +57,15 @@ export default function Form() {
             placeholder="TITLE"
           />
           <TextField
+            data-testid="description-input"
             required
             onChange={(e) => handleDescriptionChange(e)}
             type="text"
             name="description "
-            // multiline="true"
             placeholder="DESCRIPTION"
           />
           <TextField
+            data-testid="price-input"
             required
             onChange={(e) => handlePriceChange(e)}
             type="number"
@@ -74,6 +73,7 @@ export default function Form() {
             placeholder="PRICE"
           />
           <TextField
+            data-testid="quantity-input"
             required
             onChange={(e) => handleQuantityChange(e)}
             type="number"
@@ -103,6 +103,7 @@ export default function Form() {
               </InputLabel>
             )}
             <TextField
+              data-testid="image-input"
               id="img"
               required
               type="file"
@@ -114,10 +115,10 @@ export default function Form() {
             />
           </Button>
           <Button
+            data-testid="submit-button"
             style={{
               margin: '1rem',
               width: '10rem',
-
               textAlign: 'center',
             }}
             type="submit"

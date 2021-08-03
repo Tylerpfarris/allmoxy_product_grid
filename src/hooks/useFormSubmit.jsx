@@ -38,6 +38,8 @@ export const useFormSubmit = () => {
         price,
         quantity,
         img: fileUrl,
+      }).catch((err) => {
+        console.error(err);
       })
       .then(() => {
         e.target.reset();

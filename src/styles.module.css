@@ -1,0 +1,8 @@
+.deleteIcon :hover {
+  color: red;
+}
+
+.deleteIcon:active, .icons:active  {
+  transform: translateY(2px);
+}
+

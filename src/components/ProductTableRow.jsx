@@ -6,7 +6,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckIcon from '@material-ui/icons/Check';
 import { useUpdateProduct } from '../hooks/useUpdateProduct';
-
+import styles from '../styles.module.css';
 export default function ProductTableRow({
   headers,
   product,
@@ -32,18 +32,22 @@ export default function ProductTableRow({
           >
             {currentlyEditing ? (
               <CheckIcon
+                className={styles.icons}
                 color="secondary"
                 style={{ cursor: 'pointer', color: '#21BA4C' }}
                 onClick={() => handleStopEdit(product)}
               />
             ) : (
               <EditIcon
+                className={styles.icons}
                 color="action"
                 style={{ cursor: 'pointer' }}
                 onClick={() => handleEdit(index, product)}
               />
             )}
             <DeleteIcon
+              data-testid={'deleteIcon'}
+              className={styles.deleteIcon}
               style={{ cursor: 'pointer', paddingTop: '1rem' }}
               onClick={() => handleDelete(product)}
               color="action"

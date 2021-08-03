@@ -6,7 +6,7 @@ import { useSort } from '../../hooks/useSort';
 import { useProductFetch } from '../../hooks/useProductFetch';
 import { useUpdateProduct } from '../../hooks/useUpdateProduct';
 import { tableHeaders } from '../../utils/tableHeaders';
-
+import { Container } from '@material-ui/core';
 export default function App() {
   const {
     sortedRowInformation,
@@ -16,14 +16,14 @@ export default function App() {
     valueToOrderBy,
   } = useSort();
 
-  const { loading, products, setProducts } = useProductFetch();
+  const {  products, setProducts } = useProductFetch();
 
   const { handleChange, handleStopEdit, handleEdit, editIdx } =
     useUpdateProduct(products, setProducts);
 
-  if (loading) return <h1>Loading...</h1>;
+
   return (
-    <div>
+    <Container>
       <Form />
       <ProductTable
         handleDelete={handleDelete}
@@ -40,6 +40,6 @@ export default function App() {
         valueToOrderBy={valueToOrderBy}
         headers={tableHeaders}
       />
-    </div>
+    </Container>
   );
 }

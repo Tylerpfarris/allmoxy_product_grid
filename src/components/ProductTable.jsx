@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ProductTableRow from './ProductTableRow';
+
 import {
   Table,
   TableBody,
@@ -19,7 +20,6 @@ const useStyles = makeStyles({
     minWidth: 200,
   },
 });
-console.log(useStyles);
 
 export default function ProductTable({
   headers,
@@ -38,8 +38,12 @@ export default function ProductTable({
   return (
     <Box style={{ margin: '5rem', marginTop: '1rem' }}>
       <TableContainer component={Paper}>
-        <Table stickyHeader className={classes.table} aria-label="simple table">
-          <TableHead style={{border: 'none' }}>
+        <Table
+          stickyHeader
+          className={classes.table}
+          aria-label="product-table"
+        >
+          <TableHead style={{ border: 'none' }}>
             <TableRow>
               {headers.map((product, i) => (
                 <TableCell align="left" key={i} style={{ width: 'auto' }}>
