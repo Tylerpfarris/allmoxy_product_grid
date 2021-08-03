@@ -68,7 +68,7 @@ export default function Form() {
             data-testid="price-input"
             required
             onChange={(e) => handlePriceChange(e)}
-            type="number"
+            type="text"
             name="price"
             placeholder="PRICE"
           />
