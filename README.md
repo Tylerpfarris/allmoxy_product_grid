@@ -4,7 +4,7 @@
 
 - React
 - (GCP)firebase
-- firestore
-- firestorage
+  - firestore
+  - firestorage
 - Material-Ui
 - Cypress
