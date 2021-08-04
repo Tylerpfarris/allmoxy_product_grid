@@ -22,6 +22,10 @@ export const storage = firebase.storage();
 
 //async await method
 
+// const upLoadImg = async () => {
+//   await storage.ref
+// }
+
 export const updateProduct = async (id, updates) => {
   await firebase
     .firestore()
