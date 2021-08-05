@@ -34,7 +34,6 @@ export default function ProductTable({
   createSortHandler,
 }) {
   const classes = useStyles();
-
   return (
     <Box style={{ margin: '5rem', marginTop: '1rem' }}>
       <TableContainer component={Paper}>

@@ -43,6 +43,7 @@ export const updateProduct = async (id, updates) => {
     id: doc.id,
     ...doc.data(),
   };
+  console.log(product)
   return product;
 };
 

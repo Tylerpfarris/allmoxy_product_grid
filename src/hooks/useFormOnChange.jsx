@@ -4,6 +4,12 @@ export const useFormOnChange = (
   setPrice,
   setQuantity
 ) => {
+  const validate = (s) => {
+    const rgx = /^[0-9]*\.?[0-9]*$/;
+
+    return s.match(rgx) ? true : false;
+  };
+
   const handleTitleChange = ({ target }) => {
     setTitle(target.value);
   };
@@ -11,10 +17,10 @@ export const useFormOnChange = (
     setDescription(target.value);
   };
   const handlePriceChange = ({ target }) => {
-    setPrice(Number(target.value));
+    !validate(target.value) ? (target.value = '') : setPrice(target.value);
   };
   const handleQuantityChange = ({ target }) => {
-    setQuantity(Number(target.value));
+    !validate(target.value) ? (target.value = '') : setQuantity(target.value);
   };
 
   return {

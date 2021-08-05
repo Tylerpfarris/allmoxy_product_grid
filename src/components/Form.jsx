@@ -66,19 +66,19 @@ export default function Form() {
           />
           <TextField
             data-testid="price-input"
-            required
             onChange={(e) => handlePriceChange(e)}
-            type="number"
+            type="text"
             name="price"
             placeholder="PRICE"
+            pattern="/^[0-9]*\.?[0-9]*$/"
           />
           <TextField
             data-testid="quantity-input"
-            required
             onChange={(e) => handleQuantityChange(e)}
-            type="number"
+            type="text"
             name="quantity"
             placeholder="QUANTITY"
+            pattern="/^[0-9]*\.?[0-9]*$/"
           />
         </Container>
         <Container
