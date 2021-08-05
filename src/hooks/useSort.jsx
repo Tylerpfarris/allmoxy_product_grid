@@ -1,12 +1,11 @@
 import { useState } from 'react';
 
-
 export const useSort = () => {
-
   const [orderDirection, setOrderDirection] = useState('asc');
   const [valueToOrderBy, setValueToOrderBy] = useState('');
-   
+
   const handleRequestSort = (event, property) => {
+    console.log(property);
     const isAscending = valueToOrderBy === property && orderDirection === 'asc';
     setValueToOrderBy(property);
     setOrderDirection(isAscending ? 'desc' : 'asc');
@@ -15,13 +14,22 @@ export const useSort = () => {
   const createSortHandler = (property) => (event) => {
     handleRequestSort(event, property);
   };
-   
+
   const descendingComparator = (a, b, orderBy) => {
-    if(b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if(b[orderBy] > a[orderBy]) {
-      return 1;
+    if (orderBy === 'price' || orderBy === 'quantity') {
+      if (parseFloat(b[orderBy]) < parseFloat(a[orderBy])) {
+        return -1;
+      }
+      if (parseFloat(b[orderBy]) > parseFloat(a[orderBy])) {
+        return 1;
+      }
+    } else {
+      if (b[orderBy] < a[orderBy]) {
+        return -1;
+      }
+      if (b[orderBy] > a[orderBy]) {
+        return 1;
+      }
     }
     return 0;
   };
@@ -37,7 +45,8 @@ export const useSort = () => {
 
     stabilizedRowArray.sort((a, b) => {
       const order = comparator(a[0], b[0]);
-      if(order !== 0) return order;
+
+      if (order !== 0) return order;
       return a[1] - b[1];
     });
     return stabilizedRowArray.map((el) => el[0]);
@@ -47,6 +56,6 @@ export const useSort = () => {
     getComparator,
     createSortHandler,
     orderDirection,
-    valueToOrderBy
+    valueToOrderBy,
   };
 };

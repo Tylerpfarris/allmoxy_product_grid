@@ -30,7 +30,9 @@ export default function Form() {
   } = useFormOnChange(setTitle, setDescription, setPrice, setQuantity);
 
   return (
-    <Box style={{ marginTop: '0', display: 'flex', justifyContent: 'center' }}>
+    <Box
+      style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}
+    >
       <form
         data-testid="product-form"
         onSubmit={onSubmit}
@@ -66,19 +68,19 @@ export default function Form() {
           />
           <TextField
             data-testid="price-input"
-            required
             onChange={(e) => handlePriceChange(e)}
             type="text"
             name="price"
             placeholder="PRICE"
+            pattern="/^[0-9]*\.?[0-9]*$/"
           />
           <TextField
             data-testid="quantity-input"
-            required
             onChange={(e) => handleQuantityChange(e)}
             type="text"
             name="quantity"
             placeholder="QUANTITY"
+            pattern="/^[0-9]*\.?[0-9]*$/"
           />
         </Container>
         <Container
