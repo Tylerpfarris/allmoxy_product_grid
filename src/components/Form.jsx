@@ -30,7 +30,9 @@ export default function Form() {
   } = useFormOnChange(setTitle, setDescription, setPrice, setQuantity);
 
   return (
-    <Box style={{ marginTop: '0', display: 'flex', justifyContent: 'center' }}>
+    <Box
+      style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}
+    >
       <form
         data-testid="product-form"
         onSubmit={onSubmit}
