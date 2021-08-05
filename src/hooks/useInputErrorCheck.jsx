@@ -11,7 +11,12 @@ export const useInputErrorCheck = () => {
   };
 
   const inputErrorCheck = (e, prop) => {
-    console.log(e);
+    if (!e.target.value) {
+      setInputError(true);
+    } else {
+      setInputError(false);
+    }
+
     if (prop === 'price' || prop === 'quantity') {
       if (validate(e.target.value) === false) {
         setHeader(prop), setInputError(true), (e.target.value = '');

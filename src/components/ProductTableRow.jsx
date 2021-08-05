@@ -34,12 +34,14 @@ export default function ProductTableRow({
           style={{
             position: 'absolute',
           }}
-          variant="filled"
+          variant="standard"
           severity="error"
         >
           {header === 'price'
             ? 'incorrect price value, numbers and decimals only'
-            : 'incorrect quantity value, numbers and decimals only'}
+            : header === 'quantity'
+            ? 'incorrect quantity value, numbers and decimals only'
+            : 'all fields must be filled out'}
         </Alert>
       )}
       <TableRow key={`tr-${index}`} style={{ height: '9rem', width: '100vw' }}>
@@ -53,16 +55,24 @@ export default function ProductTableRow({
               }}
             >
               {currentlyEditing ? (
-                <CheckIcon
-                  className={styles.icons}
-                  color="secondary"
-                  style={{ cursor: 'pointer', color: '#21BA4C' }}
-                  onClick={(e) => {
-                    setEditToggle((prev) => !prev);
-                    setInputError(false);
-                    handleStopEdit(product, index, header.name, e);
-                  }}
-                />
+                inputError ? (
+                  <CheckIcon
+                    className={styles.icons}
+                    color="secondary"
+                    style={{ cursor: 'pointer', color: '#21BA4C' }}
+                  />
+                ) : (
+                  <CheckIcon
+                    className={styles.icons}
+                    color="secondary"
+                    style={{ cursor: 'pointer', color: '#21BA4C' }}
+                    onClick={(e) => {
+                      setEditToggle((prev) => !prev);
+                      setInputError(false);
+                      handleStopEdit(product, index, header.name, e);
+                    }}
+                  />
+                )
               ) : (
                 <EditIcon
                   className={styles.icons}
@@ -92,12 +102,14 @@ export default function ProductTableRow({
                   onChange={(e) => handleImgUpdate(e, product)}
                 />
               ) : (
-                <img
-                  style={{ maxHeight: '100px' }}
-                  width="auto"
-                  src={product[header.prop]}
-                  alt={product.title}
-                />
+                <a href={product.img}>
+                  <img
+                    style={{ maxHeight: '100px' }}
+                    width="auto"
+                    src={product[header.prop]}
+                    alt={product.title}
+                  />
+                </a>
               )}
             </TableCell>
           ) : header.prop === 'price' || header.prop === 'quantity' ? (
@@ -128,9 +140,10 @@ export default function ProductTableRow({
                   multiline
                   required={true}
                   name={header.prop}
-                  onChange={(event) =>
-                    handleChange(event, header.prop, index, product)
-                  }
+                  onChange={(event) => {
+                    inputErrorCheck(event, header.prop);
+                    handleChange(event, header.prop, index, product);
+                  }}
                   value={product[header.prop]}
                 />
               ) : (

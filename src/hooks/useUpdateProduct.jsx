@@ -1,14 +1,9 @@
 import { useState } from 'react';
 import { updateProduct, storage, db } from '../Firebase/firebase';
+// import { useInputErrorCheck } from './useInputErrorCheck';
 
 export const useUpdateProduct = (products, setProducts) => {
   const [editIdx, setEditIdx] = useState(-1);
- 
-  const validate = (s) => {
-    const rgx = /^[0-9]*\.?[0-9]*$/;
-
-    return s.match(rgx) ? true : false;
-  };
 
   const handleImgUpdate = async (e, product) => {
     const productImgRef = db.collection('Products').doc(product.id);
@@ -32,21 +27,14 @@ export const useUpdateProduct = (products, setProducts) => {
   };
 
   const handleChange = (event, name, i, product) => {
-    console.log(product);
-    console.log(name);
     const { value } = event.target;
-
-    // if (name === 'price' || name === 'quantity') {
-    //   if (!validate(value)) {
-    //     setInputError(true);
-    //     event.target.value = '';
-    //   }
-    // }
 
     const pro = products.map((row, j) =>
       j === i ? { ...row, [name]: value } : row
     );
-    setProducts(pro);
+    if (product === products[i]) {
+      setProducts(pro);
+    }
   };
 
   const handleStopEdit = (product, i, name, e) => {
@@ -55,9 +43,11 @@ export const useUpdateProduct = (products, setProducts) => {
     const pro = products.map((row, j) =>
       j === i ? { ...row, [name]: value } : row
     );
+
     if (product === products[i]) {
       updateProduct(product.id, product).then(() => {
         setProducts(pro);
+
         setEditIdx(-1);
       });
     }
@@ -66,5 +56,11 @@ export const useUpdateProduct = (products, setProducts) => {
     setEditIdx(i);
   };
 
-  return { editIdx, handleChange, handleEdit, handleStopEdit, handleImgUpdate };
+  return {
+    editIdx,
+    handleChange,
+    handleEdit,
+    handleStopEdit,
+    handleImgUpdate,
+  };
 };
