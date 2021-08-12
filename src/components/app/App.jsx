@@ -16,14 +16,13 @@ export default function App() {
     valueToOrderBy,
   } = useSort();
 
-  const {  products, setProducts } = useProductFetch();
+  const { products, setProducts } = useProductFetch();
 
   const { handleChange, handleStopEdit, handleEdit, editIdx } =
     useUpdateProduct(products, setProducts);
 
-
   return (
-    <Container>
+    <Container style={{ backgroundColor: 'blue' }}>
       <Form />
       <ProductTable
         handleDelete={handleDelete}
